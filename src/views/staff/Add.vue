@@ -1,19 +1,7 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      md="12"
-    >
-      <dashboard-congratulation-john
-        :team1-money="aggregate.team1Money"
-        :team2-money="aggregate.team2Money"
-        :rest="aggregate.rest"
-      ></dashboard-congratulation-john>
-    </v-col>
     <v-col cols="12">
-      <dashboard-datatable
-        :table-data="list"
-      ></dashboard-datatable>
+      Add staff
     </v-col>
   </v-row>
 </template>
@@ -21,23 +9,11 @@
 <script>
 // eslint-disable-next-line object-curly-newline
 import { mdiCurrencyUsd, mdiHelpCircleOutline, mdiLabelVariantOutline, mdiPoll } from '@mdi/js'
-import data from './datatable-data'
 
 // demos
-import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
-import DashboardDatatable from './DashboardDatatable.vue'
 
 export default {
-  components: {
-    DashboardCongratulationJohn,
-    DashboardDatatable,
-  },
-  data() {
-    return {
-      aggregate: data.aggregate,
-      list: data.list,
-    }
-  },
+  components: {},
   setup() {
     const totalProfit = {
       statTitle: 'Total Profit',

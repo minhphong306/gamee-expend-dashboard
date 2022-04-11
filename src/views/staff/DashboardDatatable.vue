@@ -8,22 +8,25 @@
       hide-default-footer
       disable-sort
     >
-      <template #[`item.type`]="{item}">
-        <v-chip
-          small
-          :color="typeColor[type[item.type]]"
-          class="font-weight-medium"
-        >
-          {{ type[item.type] }}
-        </v-chip>
+      <!-- name -->
+      <template #[`item.full_name`]="{item}">
+        <div class="d-flex flex-column">
+          <span class="d-block font-weight-semibold text--primary text-truncate">{{ item.full_name
+          }}</span>
+          <small>{{ item.post }}</small>
+        </div>
       </template>
-      <template #[`item.team`]="{item}">
+      <template #[`item.salary`]="{item}">
+        {{ `$${item.salary}` }}
+      </template>
+      <!-- status -->
+      <template #[`item.status`]="{item}">
         <v-chip
           small
-          :color="teamColor[team[item.team]]"
+          :color="statusColor[status[item.status]]"
           class="font-weight-medium"
         >
-          {{ team[item.team] }}
+          {{ status[item.status] }}
         </v-chip>
       </template>
       <template #[`item.action`]="{item}">
@@ -60,28 +63,20 @@ export default {
           value: 'order',
         },
         {
-          text: 'Danh mục',
+          text: 'Họ tên',
           value: 'name',
         },
         {
-          text: 'Số tiền',
-          value: 'formatedAmount',
+          text: 'Trạng thái',
+          value: 'status',
         },
         {
-          text: 'Loại',
-          value: 'type',
+          text: 'Ngày vào làm',
+          value: 'joinDate',
         },
         {
           text: 'Team',
           value: 'team',
-        },
-        {
-          text: 'Gamee',
-          value: 'team1',
-        },
-        {
-          text: 'Starbots',
-          value: 'team2',
         },
         {
           text: 'Ghi chú',
@@ -93,26 +88,14 @@ export default {
         },
       ],
       usreList: this.tableData,
-      type: {
-        1: 'Thu',
-        2: 'Chi',
+      status: {
+        1: 'Đang làm việc',
+        2: 'Đã nghỉ việc',
       },
-      typeColor: {
+      statusColor: {
         /* eslint-disable key-spacing */
-        Thu: 'success',
-        Chi: 'warning',
-        /* eslint-enable key-spacing */
-      },
-      team: {
-        1: 'Gamee',
-        2: 'Starbots',
-        3: 'All',
-      },
-      teamColor: {
-        /* eslint-disable key-spacing */
-        Gamee: 'primary',
-        Starbots: 'success',
-        All: 'warning',
+        'Đang làm việc': 'success',
+        'Đã nghỉ việc': 'warning',
         /* eslint-enable key-spacing */
       },
 

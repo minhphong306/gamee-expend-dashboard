@@ -3,18 +3,15 @@
     <v-row class="ma-0 pa-0">
       <v-col cols="8">
         <v-card-title class="text-no-wrap pt-1 ps-2">
-          Tổng hợp tình hình thu chi
+          Tổng hợp tình hình nhân sự
         </v-card-title>
         <v-card-text class="d-flex align-center mt-2 pb-2 ps-2">
           <div>
             <p class="text-xl font-weight-semibold primary--text mb-2">
-              Còn lại: {{ rest }}
+              Gamee: 10
             </p>
             <p class="text-xl font-weight-semibold primary--text mb-2">
-              Gamee: {{ team1Money }}
-            </p>
-            <p class="text-xl font-weight-semibold primary--text mb-2">
-              Starbots: {{ team2Money }}
+              Starbots: 10
             </p>
           </div>
         </v-card-text>
@@ -39,26 +36,6 @@
     </v-row>
   </v-card>
 </template>
-<script>
-
-export default {
-  props: {
-    rest: {
-      type: String,
-      require: true,
-    },
-    team1Money: {
-      type: String,
-      require: true,
-    },
-    team2Money: {
-      type: String,
-      require: true,
-    },
-  },
-}
-
-</script>
 
 <style lang="scss" scoped>
 .greeting-card {

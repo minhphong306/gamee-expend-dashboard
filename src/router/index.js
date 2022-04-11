@@ -14,6 +14,21 @@ const routes = [
     component: () => import('@/views/dashboard/Dashboard.vue'),
   },
   {
+    path: '/staff-management',
+    name: 'staff-management',
+    component: () => import('@/views/staff/Dashboard.vue'),
+  },
+  {
+    path: '/staff-management/add-staff',
+    name: 'add-staff',
+    component: () => import('@/views/staff/Add.vue'),
+  },
+  {
+    path: '/expend-management',
+    name: 'expend-management',
+    component: () => import('@/views/expend/Dashboard.vue'),
+  },
+  {
     path: '/typography',
     name: 'typography',
     component: () => import('@/views/typography/Typography.vue'),
