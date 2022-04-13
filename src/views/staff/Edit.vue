@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>Thêm mới nhân viên</v-card-title>
+    <v-card-title>Chỉnh sửa nhân viên</v-card-title>
     <v-card-text>
       <v-col cols="8">
         <v-form>
@@ -234,6 +234,19 @@ export default {
       ],
     }
   },
+  async mounted() {
+    console.log('router param: ', this.$router)
+
+    // fetch('https://gamee.congcu.org/api/module/staff/list.php', {
+    //   method: 'post',
+    //   body: JSON.stringify({ abc: 123 }),
+    // })
+    //   .then(async response => {
+    //     const data = await response.json()
+    //     console.log(data)
+    //     this.tableData = data.data
+    //   })
+  },
   methods: {
     async createStaff() {
       const body = {
@@ -280,7 +293,7 @@ export default {
           const data = await response.json()
           if (data.success) {
             alert('Thêm mới thành công')
-            await router.push({ name: 'staff-management' })
+            router.push({ name: 'staff-management' })
 
             return
           }

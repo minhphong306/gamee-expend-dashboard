@@ -30,7 +30,10 @@
         </v-chip>
       </template>
       <template #[`item.action`]="{item}">
-        <v-btn color="primary">
+        <v-btn
+          color="primary"
+          @click="$router.push({name: 'edit-staff', params: { id: item.id}})"
+        >
           Sửa
         </v-btn>
         <v-btn
@@ -109,10 +112,12 @@ export default {
 
   watch: {
     tableData(newData) {
+      console.log('receive data onwatch: ', newData)
       this.usreList = newData
     },
   },
   mounted() {
+    console.log('receive data: ', this.tableData)
     this.usreList = this.tableData
   },
 }

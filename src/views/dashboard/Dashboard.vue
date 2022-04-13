@@ -38,6 +38,20 @@ export default {
       list: data.list,
     }
   },
+
+  async created() {
+    fetch('https://gamee.congcu.org/api/module/expend/list.php', {
+      method: 'post',
+      body: JSON.stringify({ abc: 123 }),
+    })
+      .then(async response => {
+        const res1 = await response.json()
+        console.log(res1)
+        this.aggregate = res1.data.aggregate
+        this.list = res1.data.list
+      })
+  },
+
   setup() {
     const totalProfit = {
       statTitle: 'Total Profit',

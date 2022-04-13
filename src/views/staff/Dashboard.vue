@@ -37,7 +37,6 @@
 import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
 import DashboardStatisticsCard from './DashboardStatisticsCard.vue'
 import DashboardDatatable from './DashboardDatatable.vue'
-import data from './datatable-data'
 
 export default {
   components: {
@@ -48,32 +47,20 @@ export default {
 
   data() {
     return {
-      tableData: data,
+      tableData: [],
     }
   },
 
   async created() {
-    // // Simple POST request with a JSON body using fetch
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ abc: 123 }),
-    //   mode: 'no-cors',
-    // }
-    // const res = await fetch('https://gamee.congcu.org/api/module/staff/test.php', requestOptions)
-    //   .then(response => response.json())
-
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'Vue POST Request Example' }),
-    }
-    const res = await fetch('https://gamee.congcu.org/api/module/staff/test.php', requestOptions)
-      .then(response => response.json())
-
-    console.log(res)
-
-    // this.tableData = res
+    fetch('https://gamee.congcu.org/api/module/staff/list.php', {
+      method: 'post',
+      body: JSON.stringify({ abc: 123 }),
+    })
+      .then(async response => {
+        const data = await response.json()
+        console.log(data)
+        this.tableData = data.data
+      })
   },
 }
 </script>

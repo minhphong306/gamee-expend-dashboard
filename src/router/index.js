@@ -24,9 +24,9 @@ const routes = [
     component: () => import('@/views/staff/Add.vue'),
   },
   {
-    path: '/expend-management',
-    name: 'expend-management',
-    component: () => import('@/views/expend/Dashboard.vue'),
+    path: '/staff-management/edit-staff/:id',
+    name: 'edit-staff',
+    component: () => import('@/views/staff/Edit.vue'),
   },
   {
     path: '/typography',
