@@ -4,7 +4,7 @@
       cols="12"
       md="4"
     >
-      <dashboard-congratulation-john></dashboard-congratulation-john>
+      <dashboard-congratulation-john :stat="teamStatistic"></dashboard-congratulation-john>
     </v-col>
     <v-col
       cols="12"
@@ -48,10 +48,15 @@ export default {
   data() {
     return {
       tableData: [],
+      teamStatistic: {
+        gamee: 0,
+        starbots: 0,
+      },
     }
   },
 
   async created() {
+    const self = this
     fetch('https://gamee.congcu.org/api/module/staff/list.php', {
       method: 'post',
       body: JSON.stringify({ abc: 123 }),
@@ -60,6 +65,18 @@ export default {
         const data = await response.json()
         console.log(data)
         this.tableData = data.data
+
+        for (let i = 0; i < this.tableData.length; i++) {
+          const item = this.tableData[i]
+
+          if (item.team == 1) {
+            // eslint-disable-next-line no-plusplus
+            self.teamStatistic.gamee++
+          } else {
+            // eslint-disable-next-line no-plusplus
+            self.teamStatistic.starbots++
+          }
+        }
       })
   },
 }

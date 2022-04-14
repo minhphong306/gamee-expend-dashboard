@@ -16,9 +16,6 @@
           <small>{{ item.post }}</small>
         </div>
       </template>
-      <template #[`item.salary`]="{item}">
-        {{ `$${item.salary}` }}
-      </template>
       <!-- status -->
       <template #[`item.status`]="{item}">
         <v-chip
@@ -29,19 +26,21 @@
           {{ status[item.status] }}
         </v-chip>
       </template>
+      <template #[`item.team`]="{item}">
+        <v-chip
+          small
+          :color="teamColor[team[item.team]]"
+          class="font-weight-medium"
+        >
+          {{ team[item.team] }}
+        </v-chip>
+      </template>
       <template #[`item.action`]="{item}">
         <v-btn
           color="primary"
-          @click="$router.push({name: 'edit-staff', params: { id: item.id}})"
+          @click="$router.push({name: 'edit-staff', query: {id: item.id}})"
         >
           Sửa
-        </v-btn>
-        <v-btn
-          color="warning"
-          class="mx-2"
-          outlined
-        >
-          Xoá
         </v-btn>
       </template>
     </v-data-table>
@@ -99,6 +98,17 @@ export default {
         /* eslint-disable key-spacing */
         'Đang làm việc': 'success',
         'Đã nghỉ việc': 'warning',
+        /* eslint-enable key-spacing */
+      },
+
+      team: {
+        1: 'Gamee',
+        2: 'Starbots',
+      },
+      teamColor: {
+        /* eslint-disable key-spacing */
+        Gamee: 'success',
+        Starbots: 'warning',
         /* eslint-enable key-spacing */
       },
 

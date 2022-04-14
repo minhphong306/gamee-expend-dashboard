@@ -149,14 +149,22 @@
             >
               <v-btn
                 color="primary"
-                @click="createStaff()"
+                @click="updateStaff()"
               >
                 Lưu lại
               </v-btn>
               <v-btn
-                type="reset"
+                color="danger"
+                class="mx-2"
+                outlined
+                @click="deleteStaff()"
+              >
+                Xoá
+              </v-btn>
+              <v-btn
                 outlined
                 class="mx-2"
+                :to="{ name: 'staff-management' }"
               >
                 Huỷ
               </v-btn>
@@ -197,6 +205,7 @@ export default {
         mdiClipboardOutline,
       },
       formData: {
+        id: 0,
         name: '',
         status: {
           name: 'Đang làm việc',
@@ -222,6 +231,16 @@ export default {
         },
       ],
 
+      statusMap: {
+        1: {
+          name: 'Đang làm việc',
+          value: 1,
+        },
+        2: {
+          name: 'Đã nghỉ việc',
+          value: 2,
+        },
+      },
       teams: [
         {
           name: 'Gamee',
@@ -232,27 +251,50 @@ export default {
           value: 2,
         },
       ],
+      teamMap: {
+        1: {
+          name: 'Gamee',
+          value: 1,
+        },
+        2: {
+          name: 'Starbots',
+          value: 2,
+        },
+      },
     }
   },
   async mounted() {
-    console.log('router param: ', this.$router)
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    })
 
-    // fetch('https://gamee.congcu.org/api/module/staff/list.php', {
-    //   method: 'post',
-    //   body: JSON.stringify({ abc: 123 }),
-    // })
-    //   .then(async response => {
-    //     const data = await response.json()
-    //     console.log(data)
-    //     this.tableData = data.data
-    //   })
+    fetch('https://gamee.congcu.org/api/module/staff/single.php', {
+      method: 'post',
+      body: JSON.stringify({ id: params.id }),
+    })
+      .then(async response => {
+        const data = await response.json()
+        console.log(data)
+        const item = data.data
+
+        this.formData.id = item.id
+        this.formData.name = item.name
+        this.formData.note = item.note
+        this.formData.status = this.statusMap[item.status]
+        this.formData.team = this.teamMap[item.team]
+        // eslint-disable-next-line prefer-destructuring
+        this.formData.joinDate = item.joinDate.split(' ')[0]
+        this.formData.retiredDate = item.retiredDate.split(' ')[0]
+      })
   },
   methods: {
-    async createStaff() {
+    async updateStaff() {
+      console.log('Form data: ', this.formData)
       const body = {
-        name: 'Do Minh Phong',
-        status: 1,
-        joinDate: '2022-04-10',
+        id: this.formData.id,
+        name: '',
+        status: this.formData.status.value,
+        joinDate: '',
         retiredDate: 0,
         team: 1,
         note: 'Marketplace member',
@@ -278,6 +320,7 @@ export default {
 
           return
         }
+
         body.retiredDate = this.formData.retiredDate
       }
 
@@ -285,21 +328,44 @@ export default {
 
       console.log('Will send body: ', JSON.stringify(body))
 
-      fetch('https://gamee.congcu.org/api/module/staff/create.php', {
+      fetch('https://gamee.congcu.org/api/module/staff/update.php', {
         method: 'post',
         body: JSON.stringify(body),
       })
         .then(async response => {
           const data = await response.json()
           if (data.success) {
-            alert('Thêm mới thành công')
+            alert('Cập nhật thành công')
             router.push({ name: 'staff-management' })
 
             return
           }
 
-          alert('Thêm mới thất bại')
+          alert('Cập nhật thất bại')
         })
+    },
+    async deleteStaff() {
+      // eslint-disable-next-line no-restricted-globals
+      const ok = confirm(`Bạn thật sự muốn xoá nhân viên ${this.formData.name} ?`)
+      if (ok) {
+        fetch('https://gamee.congcu.org/api/module/staff/delete.php', {
+          method: 'post',
+          body: JSON.stringify({
+            id: this.formData.id,
+          }),
+        })
+          .then(async response => {
+            const data = await response.json()
+            if (data.success) {
+              alert('Xoá thành công')
+              router.push({ name: 'staff-management' })
+
+              return
+            }
+
+            alert('Xoá thất bại')
+          })
+      }
     },
   },
 }

@@ -24,7 +24,7 @@ const routes = [
     component: () => import('@/views/staff/Add.vue'),
   },
   {
-    path: '/staff-management/edit-staff/:id',
+    path: '/staff-management/edit-staff',
     name: 'edit-staff',
     component: () => import('@/views/staff/Edit.vue'),
   },

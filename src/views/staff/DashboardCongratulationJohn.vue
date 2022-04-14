@@ -8,10 +8,10 @@
         <v-card-text class="d-flex align-center mt-2 pb-2 ps-2">
           <div>
             <p class="text-xl font-weight-semibold primary--text mb-2">
-              Gamee: 10
+              Gamee: {{ stat.gamee }}
             </p>
             <p class="text-xl font-weight-semibold primary--text mb-2">
-              Starbots: 10
+              Starbots: {{ stat.starbots }}
             </p>
           </div>
         </v-card-text>
@@ -36,6 +36,16 @@
     </v-row>
   </v-card>
 </template>
+<script>
+export default {
+  props: {
+    stat: {
+      type: Object,
+      require: true,
+    },
+  },
+}
+</script>
 
 <style lang="scss" scoped>
 .greeting-card {
