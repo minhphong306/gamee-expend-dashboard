@@ -10,6 +10,17 @@
         :rest="aggregate.rest"
       ></dashboard-congratulation-john>
     </v-col>
+    <v-col
+      offset-md="10"
+      cols="12"
+    >
+      <v-btn
+        color="primary"
+        :to="{ name: 'dashboard-add-expend' }"
+      >
+        Thêm mới
+      </v-btn>
+    </v-col>
     <v-col cols="12">
       <dashboard-datatable
         :table-data="list"

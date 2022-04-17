@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>Thêm mới nhân viên</v-card-title>
+    <v-card-title>Chỉnh sửa khoản thu chi</v-card-title>
     <v-card-text>
       <v-col cols="8">
         <v-form>
@@ -9,7 +9,7 @@
               cols="12"
               md="3"
             >
-              <label for="nameIcon">Họ tên</label>
+              <label for="nameIcon">Danh mục</label>
             </v-col>
             <v-col
               cols="12"
@@ -21,7 +21,7 @@
                 :prepend-inner-icon="icons.mdiAccountOutline"
                 outlined
                 dense
-                placeholder="Nhập họ tên"
+                placeholder="Nhập danh mục"
                 hide-details
               ></v-text-field>
             </v-col>
@@ -30,20 +30,20 @@
               cols="12"
               md="3"
             >
-              <label for="statusIcon">Trạng thái</label>
+              <label for="typeIcon">Loại</label>
             </v-col>
             <v-col
               cols="12"
               md="9"
             >
               <v-select
-                id="statusIcon"
-                v-model="formData.status"
-                :items="statuses"
+                id="typeIcon"
+                v-model="formData.type"
+                :items="types"
                 :prepend-inner-icon="icons.mdiAccountCircleOutline"
                 item-text="name"
                 item-value="value"
-                label="Chọn trạng thái"
+                label="Chọn loại khoản chi"
                 persistent-hint
                 return-object
                 single-line
@@ -54,7 +54,7 @@
               cols="12"
               md="3"
             >
-              <label for="joinDate">Ngày bắt đầu</label>
+              <label for="day">Ngày chi</label>
             </v-col>
             <v-col
               cols="12"
@@ -62,39 +62,15 @@
             >
               <v-text-field
                 id="joinDate"
-                v-model="formData.joinDate"
+                v-model="formData.date"
                 type="date"
                 outlined
                 :prepend-inner-icon="icons.mdiAccountClockOutline"
                 dense
-                placeholder="Number"
+                placeholder="Ngày chi"
                 hide-details
               ></v-text-field>
             </v-col>
-
-            <template v-if="true">
-              <v-col
-                cols="12"
-                md="3"
-              >
-                <label for="retiredDate">Ngày kết thúc</label>
-              </v-col>
-              <v-col
-                cols="12"
-                md="9"
-              >
-                <v-text-field
-                  id="retiredDate"
-                  v-model="formData.retiredDate"
-                  type="date"
-                  outlined
-                  :prepend-inner-icon="icons.mdiAccountClockOutline"
-                  dense
-                  placeholder="Ngày nghỉ việc"
-                  hide-details
-                ></v-text-field>
-              </v-col>
-            </template>
 
             <v-col
               cols="12"
@@ -119,6 +95,27 @@
                 return-object
                 single-line
               ></v-select>
+            </v-col>
+            <v-col
+              cols="12"
+              md="3"
+            >
+              <label for="amountIcon">Số tiền</label>
+            </v-col>
+            <v-col
+              cols="12"
+              md="9"
+            >
+              <v-text-field
+                id="amountIcon"
+                v-model="formData.amount"
+                type="number"
+                :prepend-inner-icon="icons.mdiAccountOutline"
+                outlined
+                dense
+                placeholder="Nhập số tiền"
+                hide-details
+              ></v-text-field>
             </v-col>
 
             <v-col
@@ -197,6 +194,7 @@ export default {
         mdiClipboardOutline,
       },
       formData: {
+        id: 0,
         name: '',
         status: {
           name: 'Đang làm việc',
@@ -222,6 +220,16 @@ export default {
         },
       ],
 
+      statusMap: {
+        1: {
+          name: 'Đang làm việc',
+          value: 1,
+        },
+        2: {
+          name: 'Đã nghỉ việc',
+          value: 2,
+        },
+      },
       teams: [
         {
           name: 'Gamee',
@@ -232,16 +240,52 @@ export default {
           value: 2,
         },
       ],
+      teamMap: {
+        1: {
+          name: 'Gamee',
+          value: 1,
+        },
+        2: {
+          name: 'Starbots',
+          value: 2,
+        },
+      },
     }
   },
+  async mounted() {
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop),
+    })
+
+    fetch('https://gamee.congcu.org/api/module/expend/single.php', {
+      method: 'post',
+      body: JSON.stringify({ id: params.id }),
+    })
+      .then(async response => {
+        const data = await response.json()
+        console.log(data)
+        const item = data.data
+
+        this.formData.id = item.id
+        this.formData.name = item.name
+        this.formData.note = item.note
+        this.formData.status = this.statusMap[item.status]
+        this.formData.team = this.teamMap[item.team]
+        // eslint-disable-next-line prefer-destructuring
+        this.formData.joinDate = item.joinDate.split(' ')[0]
+        this.formData.retiredDate = item.retiredDate.split(' ')[0]
+      })
+  },
   methods: {
-    async createStaff() {
+    async updateStaff() {
+      console.log('Form data: ', this.formData)
       const body = {
-        name: 'Do Minh Phong',
-        status: 1,
-        joinDate: '2022-04-10',
+        id: this.formData.id,
+        name: '',
+        status: this.formData.status.value,
+        joinDate: '',
         retiredDate: 0,
-        team: this.formData.team.value,
+        team: 1,
         note: 'Marketplace member',
       }
 
@@ -265,6 +309,7 @@ export default {
 
           return
         }
+
         body.retiredDate = this.formData.retiredDate
       }
 
@@ -272,21 +317,44 @@ export default {
 
       console.log('Will send body: ', JSON.stringify(body))
 
-      fetch('https://gamee.congcu.org/api/module/staff/create.php', {
+      fetch('https://gamee.congcu.org/api/module/staff/update.php', {
         method: 'post',
         body: JSON.stringify(body),
       })
         .then(async response => {
           const data = await response.json()
           if (data.success) {
-            alert('Thêm mới thành công')
-            await router.push({ name: 'staff-management' })
+            alert('Cập nhật thành công')
+            router.push({ name: 'staff-management' })
 
             return
           }
 
-          alert('Thêm mới thất bại')
+          alert('Cập nhật thất bại')
         })
+    },
+    async deleteExpend() {
+      // eslint-disable-next-line no-restricted-globals
+      const ok = confirm(`Bạn thật sự muốn xoá khoản chi ${this.formData.name} ?`)
+      if (ok) {
+        fetch('https://gamee.congcu.org/api/module/expend/delete.php', {
+          method: 'post',
+          body: JSON.stringify({
+            id: this.formData.id,
+          }),
+        })
+          .then(async response => {
+            const data = await response.json()
+            if (data.success) {
+              alert('Xoá thành công')
+              router.push({ name: 'dashboard' })
+
+              return
+            }
+
+            alert('Xoá thất bại')
+          })
+      }
     },
   },
 }

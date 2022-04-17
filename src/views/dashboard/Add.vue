@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title>Thêm mới nhân viên</v-card-title>
+    <v-card-title>Thêm mới thu/chi</v-card-title>
     <v-card-text>
       <v-col cols="8">
         <v-form>
@@ -9,7 +9,7 @@
               cols="12"
               md="3"
             >
-              <label for="nameIcon">Họ tên</label>
+              <label for="nameIcon">Danh mục</label>
             </v-col>
             <v-col
               cols="12"
@@ -21,7 +21,7 @@
                 :prepend-inner-icon="icons.mdiAccountOutline"
                 outlined
                 dense
-                placeholder="Nhập họ tên"
+                placeholder="Nhập danh mục"
                 hide-details
               ></v-text-field>
             </v-col>
@@ -30,20 +30,20 @@
               cols="12"
               md="3"
             >
-              <label for="statusIcon">Trạng thái</label>
+              <label for="typeIcon">Loại</label>
             </v-col>
             <v-col
               cols="12"
               md="9"
             >
               <v-select
-                id="statusIcon"
-                v-model="formData.status"
-                :items="statuses"
+                id="typeIcon"
+                v-model="formData.type"
+                :items="types"
                 :prepend-inner-icon="icons.mdiAccountCircleOutline"
                 item-text="name"
                 item-value="value"
-                label="Chọn trạng thái"
+                label="Chọn loại khoản chi"
                 persistent-hint
                 return-object
                 single-line
@@ -54,7 +54,7 @@
               cols="12"
               md="3"
             >
-              <label for="joinDate">Ngày bắt đầu</label>
+              <label for="day">Ngày chi</label>
             </v-col>
             <v-col
               cols="12"
@@ -62,39 +62,15 @@
             >
               <v-text-field
                 id="joinDate"
-                v-model="formData.joinDate"
+                v-model="formData.date"
                 type="date"
                 outlined
                 :prepend-inner-icon="icons.mdiAccountClockOutline"
                 dense
-                placeholder="Number"
+                placeholder="Ngày chi"
                 hide-details
               ></v-text-field>
             </v-col>
-
-            <template v-if="true">
-              <v-col
-                cols="12"
-                md="3"
-              >
-                <label for="retiredDate">Ngày kết thúc</label>
-              </v-col>
-              <v-col
-                cols="12"
-                md="9"
-              >
-                <v-text-field
-                  id="retiredDate"
-                  v-model="formData.retiredDate"
-                  type="date"
-                  outlined
-                  :prepend-inner-icon="icons.mdiAccountClockOutline"
-                  dense
-                  placeholder="Ngày nghỉ việc"
-                  hide-details
-                ></v-text-field>
-              </v-col>
-            </template>
 
             <v-col
               cols="12"
@@ -119,6 +95,27 @@
                 return-object
                 single-line
               ></v-select>
+            </v-col>
+            <v-col
+              cols="12"
+              md="3"
+            >
+              <label for="amountIcon">Số tiền</label>
+            </v-col>
+            <v-col
+              cols="12"
+              md="9"
+            >
+              <v-text-field
+                id="amountIcon"
+                v-model="formData.amount"
+                type="number"
+                :prepend-inner-icon="icons.mdiAccountOutline"
+                outlined
+                dense
+                placeholder="Nhập số tiền"
+                hide-details
+              ></v-text-field>
             </v-col>
 
             <v-col
@@ -198,26 +195,27 @@ export default {
       },
       formData: {
         name: '',
-        status: {
-          name: 'Đang làm việc',
+        createdUserId: 18,
+        type: {
+          name: 'Nạp tiền',
           value: 1,
         },
-        joinDate: '',
-        retiredDate: '',
         team: {
-          name: 'Gamee',
-          value: 1,
+          name: 'Chung',
+          value: 3,
         },
+        amount: 0,
         note: '',
+        date: '',
       },
 
-      statuses: [
+      types: [
         {
-          name: 'Đang làm việc',
+          name: 'Nạp tiền',
           value: 1,
         },
         {
-          name: 'Đã nghỉ việc',
+          name: 'Chi tiền',
           value: 2,
         },
       ],
@@ -231,18 +229,23 @@ export default {
           name: 'Starbots',
           value: 2,
         },
+        {
+          name: 'Chung',
+          value: 3,
+        },
       ],
     }
   },
   methods: {
     async createStaff() {
       const body = {
-        name: 'Do Minh Phong',
-        status: 1,
-        joinDate: '2022-04-10',
-        retiredDate: 0,
-        team: this.formData.team.value,
-        note: 'Marketplace member',
+        date: '2022-04-10',
+        createdUserId: '18',
+        name: 'Nap tien22',
+        type: this.formData.type.value,
+        team: '2',
+        amount: '100000000',
+        note: ' ',
       }
 
       if (!this.formData.name) {
@@ -252,27 +255,24 @@ export default {
       }
       body.name = this.formData.name
 
-      if (!this.formData.joinDate) {
-        alert('Vui lòng chọn ngày tham gia')
+      if (!this.formData.date) {
+        alert('Vui lòng chọn ngày chi')
 
         return
       }
-      body.joinDate = this.formData.joinDate
-
-      if (this.formData.status.value === 2) {
-        if (!this.formData.retiredDate) {
-          alert('Vui lòng chọn ngày kết thúc')
-
-          return
-        }
-        body.retiredDate = this.formData.retiredDate
-      }
-
+      body.date = this.formData.date
       body.note = this.formData.note
+
+      if (!this.formData.amount) {
+        alert('Vui lòng nhập số tiền')
+
+        return
+      }
+      body.amount = this.formData.amount
 
       console.log('Will send body: ', JSON.stringify(body))
 
-      fetch('https://gamee.congcu.org/api/module/staff/create.php', {
+      fetch('https://gamee.congcu.org/api/module/expend/create.php', {
         method: 'post',
         body: JSON.stringify(body),
       })
@@ -280,7 +280,7 @@ export default {
           const data = await response.json()
           if (data.success) {
             alert('Thêm mới thành công')
-            await router.push({ name: 'staff-management' })
+            await router.push({ name: 'dashboard' })
 
             return
           }

@@ -27,15 +27,11 @@
         </v-chip>
       </template>
       <template #[`item.action`]="{item}">
-        <v-btn color="primary">
-          Sửa
-        </v-btn>
         <v-btn
-          color="warning"
-          class="mx-2"
-          outlined
+          color="primary"
+          @click="$router.push({name: 'dashboard-edit-expend', query: {id: item.id}})"
         >
-          Xoá
+          Sửa
         </v-btn>
       </template>
     </v-data-table>

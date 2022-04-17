@@ -68,6 +68,7 @@ export default {
 
         for (let i = 0; i < this.tableData.length; i++) {
           const item = this.tableData[i]
+          item.order = i + 1
 
           if (item.team == 1) {
             // eslint-disable-next-line no-plusplus

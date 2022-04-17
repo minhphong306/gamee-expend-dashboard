@@ -296,7 +296,7 @@ export default {
         status: this.formData.status.value,
         joinDate: '',
         retiredDate: 0,
-        team: 1,
+        team: this.formData.team.value,
         note: 'Marketplace member',
       }
 
